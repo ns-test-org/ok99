@@ -24,6 +24,7 @@ const slogans = [
 export default function Landing() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
+  const [time, setTime] = useState(new Date());
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -37,6 +38,14 @@ export default function Landing() {
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTime(new Date());
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
   return (
     <div className="relative h-[100dvh] w-full overflow-hidden bg-black text-white">
       {/* Enhanced animated aurora background layers */}
@@ -47,6 +56,18 @@ export default function Landing() {
       {/* Floating particles overlay */}
       <div className="absolute inset-0 bg-particles" />
       
+      {/* Clock display - top center */}
+      <div className="absolute top-8 left-1/2 -translate-x-1/2 z-20">
+        <div className="text-center">
+          <div className="text-6xl md:text-7xl font-light tracking-wider text-white/90 tabular-nums">
+            {time.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })}
+          </div>
+          <div className="text-sm md:text-base font-light text-white/60 mt-2">
+            {time.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+          </div>
+        </div>
+      </div>
+
       {/* Main content - centered */}
       <main className="relative z-10 h-full flex flex-col items-center justify-center px-6">
         <h1 className="text-center text-[clamp(28px,6vw,64px)] font-medium tracking-tight mb-4">
@@ -82,3 +103,5 @@ export default function Landing() {
     </div>
   );
 }
+
+
